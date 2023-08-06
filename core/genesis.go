@@ -273,6 +273,7 @@ type ChainOverrides struct {
 	OverrideOptimismRegolith *uint64
 	OverrideOptimism         *bool
 	OverrideL1ArchiveNodeRPC *string
+	L1ArchiveNodeRPC         *string
 }
 
 // SetupGenesisBlock writes or updates the genesis block in db.
@@ -317,6 +318,9 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, triedb *trie.Database, gen
 			}
 			if overrides != nil && overrides.OverrideL1ArchiveNodeRPC != nil {
 				config.L1ArchiveNodeRPC = *overrides.OverrideL1ArchiveNodeRPC
+			}
+			if overrides != nil && overrides.L1ArchiveNodeRPC != nil {
+				config.L1ArchiveNodeRPC = overrides.L1ArchiveNodeRPC
 			}
 			if overrides != nil && overrides.OverrideOptimism != nil {
 				if *overrides.OverrideOptimism {

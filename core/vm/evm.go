@@ -306,6 +306,7 @@ func (evm *EVM) CallCode(caller ContractRef, addr common.Address, input []byte, 
 
 	// It is allowed to call precompiles, even via delegatecall
 	if p, isPrecompile := evm.precompile(addr); isPrecompile {
+		// ret, gas, err = RunPrecompiledContract(nil, p, input, gas)
 		ret, gas, err = RunPrecompiledContract(evm.getPrecompileContext(), p, input, gas)
 	} else {
 		addrCopy := addr
@@ -351,6 +352,7 @@ func (evm *EVM) DelegateCall(caller ContractRef, addr common.Address, input []by
 
 	// It is allowed to call precompiles, even via delegatecall
 	if p, isPrecompile := evm.precompile(addr); isPrecompile {
+		// 		ret, gas, err = RunPrecompiledContract(nil, p, input, gas)
 		ret, gas, err = RunPrecompiledContract(evm.getPrecompileContext(), p, input, gas)
 	} else {
 		addrCopy := addr
