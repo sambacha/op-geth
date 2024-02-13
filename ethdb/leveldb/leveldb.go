@@ -417,6 +417,11 @@ func (b *batch) Write() error {
 	return b.db.Write(b.b, nil)
 }
 
+// Write flushes any accumulated data to disk.
+func (b *batch) WriteWithSync() error {
+	return b.db.Write(b.b, &opt.WriteOptions{Sync: true, NoWriteMerge: true})
+}
+
 // Reset resets the batch for reuse.
 func (b *batch) Reset() {
 	b.b.Reset()

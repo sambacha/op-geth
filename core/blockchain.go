@@ -925,6 +925,10 @@ func (bc *BlockChain) ExportN(w io.Writer, first uint64, last uint64) error {
 	return nil
 }
 
+type writeWithSync interface {
+	WriteWithSync() error
+}
+
 // writeHeadBlock injects a new head block into the current block chain. This method
 // assumes that the block is indeed a true head. It will also reset the head
 // header and the head snap sync block to this very same block if they are older
@@ -941,10 +945,19 @@ func (bc *BlockChain) writeHeadBlock(block *types.Block) {
 	rawdb.WriteTxLookupEntriesByBlock(batch, block)
 	rawdb.WriteHeadBlockHash(batch, block.Hash())
 
-	// Flush the whole batch into the disk, exit the node if failed
-	if err := batch.Write(); err != nil {
-		log.Crit("Failed to update chain indexes and markers", "err", err)
+	if b2, ok := batch.(writeWithSync); ok {
+		log.Info("writing with the sync option")
+		// Flush the whole batch into the disk, exit the node if failed
+		if err := b2.WriteWithSync(); err != nil {
+			log.Crit("Failed to update chain indexes and markers", "err", err)
+		}
+	} else {
+		// Flush the whole batch into the disk, exit the node if failed
+		if err := batch.Write(); err != nil {
+			log.Crit("Failed to update chain indexes and markers", "err", err)
+		}
 	}
+
 	// Update all in-memory chain markers in the last step
 	bc.hc.SetCurrentHeader(block.Header())
 
