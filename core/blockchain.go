@@ -483,7 +483,9 @@ func NewBlockChain(db ethdb.Database, cacheConfig *CacheConfig, genesis *Genesis
 // into node seamlessly.
 func (bc *BlockChain) empty() bool {
 	genesis := bc.genesisBlock.Hash()
-	for _, hash := range []common.Hash{rawdb.ReadHeadBlockHash(bc.db), rawdb.ReadHeadHeaderHash(bc.db), rawdb.ReadHeadFastBlockHash(bc.db)} {
+	t := []common.Hash{rawdb.ReadHeadBlockHash(bc.db), rawdb.ReadHeadHeaderHash(bc.db), rawdb.ReadHeadFastBlockHash(bc.db)}
+	log.Info("checking if empty", "block", t)
+	for _, hash := range t {
 		if hash != genesis {
 			return false
 		}
@@ -930,6 +932,7 @@ func (bc *BlockChain) ExportN(w io.Writer, first uint64, last uint64) error {
 //
 // Note, this function assumes that the `mu` mutex is held!
 func (bc *BlockChain) writeHeadBlock(block *types.Block) {
+	log.Info("writeHeadBlock called", "block", block.Hash().String(), "root", block.Root().String())
 	// Add the block to the canonical chain number scheme and mark as the head
 	batch := bc.db.NewBatch()
 	rawdb.WriteHeadHeaderHash(batch, block.Hash())
@@ -950,6 +953,7 @@ func (bc *BlockChain) writeHeadBlock(block *types.Block) {
 
 	bc.currentBlock.Store(block.Header())
 	headBlockGauge.Update(int64(block.NumberU64()))
+	log.Info("writeHeadBlock done", "block", block.Hash().String(), "root", block.Root().String())
 }
 
 // stopWithoutSaving stops the blockchain service. If any imports are currently in progress
@@ -1390,9 +1394,11 @@ func (bc *BlockChain) writeKnownBlock(block *types.Block) error {
 // writeBlockWithState writes block, metadata and corresponding state data to the
 // database.
 func (bc *BlockChain) writeBlockWithState(block *types.Block, receipts []*types.Receipt, state *state.StateDB) error {
+	log.Info("wrote block with state", "blockhash", block.Hash().String(), "root", block.Root().String())
 	// Calculate the total difficulty of the block
 	ptd := bc.GetTd(block.ParentHash(), block.NumberU64()-1)
 	if ptd == nil {
+		log.Info("unkown parent in write block with state")
 		return consensus.ErrUnknownAncestor
 	}
 	// Make sure no inconsistent state is leaked during insertion
@@ -1489,6 +1495,7 @@ func (bc *BlockChain) WriteBlockAndSetHead(block *types.Block, receipts []*types
 // writeBlockAndSetHead is the internal implementation of WriteBlockAndSetHead.
 // This function expects the chain mutex to be held.
 func (bc *BlockChain) writeBlockAndSetHead(block *types.Block, receipts []*types.Receipt, logs []*types.Log, state *state.StateDB, emitHeadEvent bool) (status WriteStatus, err error) {
+	log.Info("writeBlockAndSetHead called", "block", block.Hash().String(), "root", block.Root().String())
 	if err := bc.writeBlockWithState(block, receipts, state); err != nil {
 		return NonStatTy, err
 	}

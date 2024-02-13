@@ -255,6 +255,8 @@ func (t *Tree) Disable() {
 	t.lock.Lock()
 	defer t.lock.Unlock()
 
+	log.Info("Disabling snapshots")
+
 	for _, layer := range t.layers {
 		switch layer := layer.(type) {
 		case *diskLayer:
@@ -361,6 +363,8 @@ func (t *Tree) Update(blockRoot common.Hash, parentRoot common.Hash, destructs m
 	t.lock.Lock()
 	defer t.lock.Unlock()
 
+	log.Info("updating snapshot", "root", blockRoot.String(), "parentRoot", parentRoot.String())
+
 	t.layers[snap.root] = snap
 	return nil
 }
@@ -375,6 +379,7 @@ func (t *Tree) Update(blockRoot common.Hash, parentRoot common.Hash, destructs m
 // survival is only known *after* capping, we need to omit it from the count if
 // we want to ensure that *at least* the requested number of diff layers remain.
 func (t *Tree) Cap(root common.Hash, layers int) error {
+	log.Info("Cap", "root", root.String(), "layers", layers)
 	// Retrieve the head snapshot to cap from
 	snap := t.Snapshot(root)
 	if snap == nil {
@@ -403,6 +408,8 @@ func (t *Tree) Cap(root common.Hash, layers int) error {
 		diff.lock.RLock()
 		base := diffToDisk(diff.flatten().(*diffLayer))
 		diff.lock.RUnlock()
+
+		log.Info("Replaced the snapshot tree with the flat base", "root", root.String())
 
 		// Replace the entire snapshot tree with the flat base
 		t.layers = map[common.Hash]snapshot{base.root: base}
