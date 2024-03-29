@@ -1,0 +1,25 @@
+name: Go
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v5
+      with:
+        go-version: ^1.22
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
+    - name: Build
+      run: env GO111MODULE=on go run ./build/bin build/ci.go install ./cmd/geth
