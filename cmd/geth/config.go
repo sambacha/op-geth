@@ -193,6 +193,9 @@ func makeFullNode(ctx *cli.Context) (*node.Node, ethapi.Backend) {
 		v := ctx.Uint64(utils.OverrideVerkle.Name)
 		cfg.Eth.OverrideVerkle = &v
 	}
+	if ctx.IsSet(utils.L1ArchiveNodeRPCFlag.Name) {
+		cfg.Eth.L1ArchiveNodeRPC = ctx.String(utils.L1ArchiveNodeRPCFlag.Name)
+	}
 
 	backend, eth := utils.RegisterEthService(stack, &cfg.Eth)
 

@@ -897,6 +897,11 @@ var (
 		Category: flags.RollupCategory,
 		Value:    true,
 	}
+	//L1ArchiveNodeRPCFlag = &cli.StringFlag{
+	//	Name:     "rollup.l1archivenoderpc",
+	//	Usage:    "RPC endpoint for L1 archive node.",
+	//	Category: flags.RollupCategory,
+	//}
 
 	// Metrics flags
 	MetricsEnabledFlag = &cli.BoolFlag{
@@ -1847,6 +1852,10 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ethconfig.Config) {
 	cfg.RollupDisableTxPoolAdmission = cfg.RollupSequencerHTTP != "" && !ctx.Bool(RollupEnableTxPoolAdmissionFlag.Name)
 	cfg.RollupHaltOnIncompatibleProtocolVersion = ctx.String(RollupHaltOnIncompatibleProtocolVersionFlag.Name)
 	cfg.ApplySuperchainUpgrades = ctx.Bool(RollupSuperchainUpgradesFlag.Name)
+	//#L1ARCHIVE
+	//	if ctx.IsSet(L1ArchiveNodeRPCFlag.Name) {
+	//		cfg.L1ArchiveNodeRPC = ctx.String(L1ArchiveNodeRPCFlag.Name)
+	//	}
 	// Override any default configs for hard coded networks.
 	switch {
 	case ctx.Bool(MainnetFlag.Name):

@@ -272,6 +272,7 @@ type ChainOverrides struct {
 	OverrideOptimismEcotone *uint64
 	ApplySuperchainUpgrades bool
 	OverrideOptimismInterop *uint64
+	// OverrideL1ArchiveNodeRPC *string
 }
 
 // SetupGenesisBlock writes or updates the genesis block in db.
