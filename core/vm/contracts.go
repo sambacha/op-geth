@@ -23,8 +23,14 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"strings"
+	"time"
 
 	"github.com/ethereum/go-ethereum"
+<<<<<<< HEAD
+=======
+	"github.com/ethereum/go-ethereum/accounts/abi"
+>>>>>>> origin/fixup-pass1
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -32,7 +38,10 @@ import (
 	"github.com/ethereum/go-ethereum/crypto/blake2b"
 	"github.com/ethereum/go-ethereum/crypto/bls12381"
 	"github.com/ethereum/go-ethereum/crypto/bn256"
+<<<<<<< HEAD
 	"github.com/ethereum/go-ethereum/crypto/kzg4844"
+=======
+>>>>>>> origin/fixup-pass1
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rpc"
@@ -48,8 +57,15 @@ type PrecompileContext interface {
 // requires a deterministic gas count based on the input size of the Run method of the
 // contract.
 type PrecompiledContract interface {
+<<<<<<< HEAD
 	RequiredGas(input []byte) uint64                         // RequiredPrice calculates the contract gas use
 	Run(ctx PrecompileContext, input []byte) ([]byte, error) // Run runs the precompiled contract
+=======
+	RequiredGas(input []byte) uint64                             // RequiredPrice calculates the contract gas use
+	Run(context PrecompileContext, input []byte) ([]byte, error) // Run runs the precompiled contract
+	UseContext() bool                                             // UseContext returns whether the precompiled contract requires access to the state database
+	RunWithContext(context PrecompileContext, input []byte, gas uint64) ([]byte, error)
+>>>>>>> origin/fixup-pass1
 }
 
 // PrecompiledContractsHomestead contains the default set of pre-compiled Ethereum
@@ -100,6 +116,7 @@ var PrecompiledContractsBerlin = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{7}):  &bn256ScalarMulIstanbul{},
 	common.BytesToAddress([]byte{8}):  &bn256PairingIstanbul{},
 	common.BytesToAddress([]byte{9}):  &blake2F{},
+<<<<<<< HEAD
 	common.BytesToAddress([]byte{19}): &remoteStaticCall{},
 }
 
@@ -116,6 +133,10 @@ var PrecompiledContractsCancun = map[common.Address]PrecompiledContract{
 	common.BytesToAddress([]byte{8}):    &bn256PairingIstanbul{},
 	common.BytesToAddress([]byte{9}):    &blake2F{},
 	common.BytesToAddress([]byte{0x0a}): &kzgPointEvaluation{},
+=======
+	common.BytesToAddress([]byte{10}): &bls12381G1Add{},
+	common.BytesToAddress([]byte{19}): &remoteStaticCall{},
+>>>>>>> origin/fixup-pass1
 }
 
 // PrecompiledContractsBLS contains the set of pre-compiled Ethereum
@@ -179,13 +200,21 @@ func ActivePrecompiles(rules params.Rules) []common.Address {
 // - the returned bytes,
 // - the _remaining_ gas,
 // - any error that occurred
+<<<<<<< HEAD
 func RunPrecompiledContract(ctx PrecompileContext, p PrecompiledContract, input []byte, suppliedGas uint64) (ret []byte, remainingGas uint64, err error) {
+=======
+func RunPrecompiledContract(context PrecompileContext, p PrecompiledContract, input []byte, suppliedGas uint64) (ret []byte, remainingGas uint64, err error) {
+>>>>>>> origin/fixup-pass1
 	gasCost := p.RequiredGas(input)
 	if suppliedGas < gasCost {
 		return nil, 0, ErrOutOfGas
 	}
 	suppliedGas -= gasCost
+<<<<<<< HEAD
 	output, err := p.Run(ctx, input)
+=======
+	output, err := p.Run(context, input)
+>>>>>>> origin/fixup-pass1
 	return output, suppliedGas, err
 }
 
@@ -196,7 +225,11 @@ func (c *ecrecover) RequiredGas(input []byte) uint64 {
 	return params.EcrecoverGas
 }
 
+<<<<<<< HEAD
 func (c *ecrecover) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *ecrecover) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	const ecRecoverInputLength = 128
 
 	input = common.RightPadBytes(input, ecRecoverInputLength)
@@ -237,7 +270,11 @@ type sha256hash struct{}
 func (c *sha256hash) RequiredGas(input []byte) uint64 {
 	return uint64(len(input)+31)/32*params.Sha256PerWordGas + params.Sha256BaseGas
 }
+<<<<<<< HEAD
 func (c *sha256hash) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *sha256hash) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	h := sha256.Sum256(input)
 	return h[:], nil
 }
@@ -252,7 +289,11 @@ type ripemd160hash struct{}
 func (c *ripemd160hash) RequiredGas(input []byte) uint64 {
 	return uint64(len(input)+31)/32*params.Ripemd160PerWordGas + params.Ripemd160BaseGas
 }
+<<<<<<< HEAD
 func (c *ripemd160hash) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *ripemd160hash) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	ripemd := ripemd160.New()
 	ripemd.Write(input)
 	return common.LeftPadBytes(ripemd.Sum(nil), 32), nil
@@ -268,7 +309,11 @@ type dataCopy struct{}
 func (c *dataCopy) RequiredGas(input []byte) uint64 {
 	return uint64(len(input)+31)/32*params.IdentityPerWordGas + params.IdentityBaseGas
 }
+<<<<<<< HEAD
 func (c *dataCopy) Run(ctx PrecompileContext, in []byte) ([]byte, error) {
+=======
+func (c *dataCopy) Run(context PrecompileContext, in []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return common.CopyBytes(in), nil
 }
 
@@ -394,7 +439,11 @@ func (c *bigModExp) RequiredGas(input []byte) uint64 {
 	return gas.Uint64()
 }
 
+<<<<<<< HEAD
 func (c *bigModExp) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bigModExp) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	var (
 		baseLen = new(big.Int).SetBytes(getData(input, 0, 32)).Uint64()
 		expLen  = new(big.Int).SetBytes(getData(input, 32, 32)).Uint64()
@@ -474,7 +523,11 @@ func (c *bn256AddIstanbul) RequiredGas(input []byte) uint64 {
 	return params.Bn256AddGasIstanbul
 }
 
+<<<<<<< HEAD
 func (c *bn256AddIstanbul) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256AddIstanbul) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256Add(input)
 }
 
@@ -487,7 +540,11 @@ func (c *bn256AddByzantium) RequiredGas(input []byte) uint64 {
 	return params.Bn256AddGasByzantium
 }
 
+<<<<<<< HEAD
 func (c *bn256AddByzantium) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256AddByzantium) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256Add(input)
 }
 
@@ -512,7 +569,11 @@ func (c *bn256ScalarMulIstanbul) RequiredGas(input []byte) uint64 {
 	return params.Bn256ScalarMulGasIstanbul
 }
 
+<<<<<<< HEAD
 func (c *bn256ScalarMulIstanbul) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256ScalarMulIstanbul) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256ScalarMul(input)
 }
 
@@ -525,7 +586,11 @@ func (c *bn256ScalarMulByzantium) RequiredGas(input []byte) uint64 {
 	return params.Bn256ScalarMulGasByzantium
 }
 
+<<<<<<< HEAD
 func (c *bn256ScalarMulByzantium) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256ScalarMulByzantium) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256ScalarMul(input)
 }
 
@@ -580,7 +645,11 @@ func (c *bn256PairingIstanbul) RequiredGas(input []byte) uint64 {
 	return params.Bn256PairingBaseGasIstanbul + uint64(len(input)/192)*params.Bn256PairingPerPointGasIstanbul
 }
 
+<<<<<<< HEAD
 func (c *bn256PairingIstanbul) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256PairingIstanbul) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256Pairing(input)
 }
 
@@ -593,7 +662,11 @@ func (c *bn256PairingByzantium) RequiredGas(input []byte) uint64 {
 	return params.Bn256PairingBaseGasByzantium + uint64(len(input)/192)*params.Bn256PairingPerPointGasByzantium
 }
 
+<<<<<<< HEAD
 func (c *bn256PairingByzantium) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bn256PairingByzantium) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	return runBn256Pairing(input)
 }
 
@@ -619,7 +692,11 @@ var (
 	errBlake2FInvalidFinalFlag   = errors.New("invalid final flag")
 )
 
+<<<<<<< HEAD
 func (c *blake2F) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *blake2F) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Make sure the input is valid (correct length and final flag)
 	if len(input) != blake2FInputLength {
 		return nil, errBlake2FInvalidInputLength
@@ -673,7 +750,11 @@ func (c *bls12381G1Add) RequiredGas(input []byte) uint64 {
 	return params.Bls12381G1AddGas
 }
 
+<<<<<<< HEAD
 func (c *bls12381G1Add) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G1Add) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G1Add precompile.
 	// > G1 addition call expects `256` bytes as an input that is interpreted as byte concatenation of two G1 points (`128` bytes each).
 	// > Output is an encoding of addition operation result - single G1 point (`128` bytes).
@@ -711,7 +792,11 @@ func (c *bls12381G1Mul) RequiredGas(input []byte) uint64 {
 	return params.Bls12381G1MulGas
 }
 
+<<<<<<< HEAD
 func (c *bls12381G1Mul) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G1Mul) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G1Mul precompile.
 	// > G1 multiplication call expects `160` bytes as an input that is interpreted as byte concatenation of encoding of G1 point (`128` bytes) and encoding of a scalar value (`32` bytes).
 	// > Output is an encoding of multiplication operation result - single G1 point (`128` bytes).
@@ -761,7 +846,11 @@ func (c *bls12381G1MultiExp) RequiredGas(input []byte) uint64 {
 	return (uint64(k) * params.Bls12381G1MulGas * discount) / 1000
 }
 
+<<<<<<< HEAD
 func (c *bls12381G1MultiExp) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G1MultiExp) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G1MultiExp precompile.
 	// G1 multiplication call expects `160*k` bytes as an input that is interpreted as byte concatenation of `k` slices each of them being a byte concatenation of encoding of G1 point (`128` bytes) and encoding of a scalar value (`32` bytes).
 	// Output is an encoding of multiexponentiation operation result - single G1 point (`128` bytes).
@@ -804,7 +893,11 @@ func (c *bls12381G2Add) RequiredGas(input []byte) uint64 {
 	return params.Bls12381G2AddGas
 }
 
+<<<<<<< HEAD
 func (c *bls12381G2Add) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G2Add) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G2Add precompile.
 	// > G2 addition call expects `512` bytes as an input that is interpreted as byte concatenation of two G2 points (`256` bytes each).
 	// > Output is an encoding of addition operation result - single G2 point (`256` bytes).
@@ -842,7 +935,11 @@ func (c *bls12381G2Mul) RequiredGas(input []byte) uint64 {
 	return params.Bls12381G2MulGas
 }
 
+<<<<<<< HEAD
 func (c *bls12381G2Mul) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G2Mul) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G2MUL precompile logic.
 	// > G2 multiplication call expects `288` bytes as an input that is interpreted as byte concatenation of encoding of G2 point (`256` bytes) and encoding of a scalar value (`32` bytes).
 	// > Output is an encoding of multiplication operation result - single G2 point (`256` bytes).
@@ -892,7 +989,11 @@ func (c *bls12381G2MultiExp) RequiredGas(input []byte) uint64 {
 	return (uint64(k) * params.Bls12381G2MulGas * discount) / 1000
 }
 
+<<<<<<< HEAD
 func (c *bls12381G2MultiExp) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381G2MultiExp) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 G2MultiExp precompile logic
 	// > G2 multiplication call expects `288*k` bytes as an input that is interpreted as byte concatenation of `k` slices each of them being a byte concatenation of encoding of G2 point (`256` bytes) and encoding of a scalar value (`32` bytes).
 	// > Output is an encoding of multiexponentiation operation result - single G2 point (`256` bytes).
@@ -935,7 +1036,11 @@ func (c *bls12381Pairing) RequiredGas(input []byte) uint64 {
 	return params.Bls12381PairingBaseGas + uint64(len(input)/384)*params.Bls12381PairingPerPairGas
 }
 
+<<<<<<< HEAD
 func (c *bls12381Pairing) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381Pairing) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 Pairing precompile logic.
 	// > Pairing call expects `384*k` bytes as an inputs that is interpreted as byte concatenation of `k` slices. Each slice has the following structure:
 	// > - `128` bytes of G1 point encoding
@@ -1014,7 +1119,11 @@ func (c *bls12381MapG1) RequiredGas(input []byte) uint64 {
 	return params.Bls12381MapG1Gas
 }
 
+<<<<<<< HEAD
 func (c *bls12381MapG1) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381MapG1) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 Map_To_G1 precompile.
 	// > Field-to-curve call expects `64` bytes an an input that is interpreted as a an element of the base field.
 	// > Output of this call is `128` bytes and is G1 point following respective encoding rules.
@@ -1049,7 +1158,11 @@ func (c *bls12381MapG2) RequiredGas(input []byte) uint64 {
 	return params.Bls12381MapG2Gas
 }
 
+<<<<<<< HEAD
 func (c *bls12381MapG2) Run(ctx PrecompileContext, input []byte) ([]byte, error) {
+=======
+func (c *bls12381MapG2) Run(context PrecompileContext, input []byte) ([]byte, error) {
+>>>>>>> origin/fixup-pass1
 	// Implements EIP-2537 Map_FP2_TO_G2 precompile logic.
 	// > Field-to-curve call expects `128` bytes an an input that is interpreted as a an element of the quadratic extension field.
 	// > Output of this call is `256` bytes and is G2 point following respective encoding rules.
@@ -1083,6 +1196,7 @@ func (c *bls12381MapG2) Run(ctx PrecompileContext, input []byte) ([]byte, error)
 	return g.EncodePoint(r), nil
 }
 
+<<<<<<< HEAD
 // kzgPointEvaluation implements the EIP-4844 point evaluation precompile.
 type kzgPointEvaluation struct{}
 
@@ -1147,6 +1261,8 @@ func kZGToVersionedHash(kzg kzg4844.Commitment) common.Hash {
 	return h
 }
 
+=======
+>>>>>>> origin/fixup-pass1
 type remoteStaticCall struct{}
 
 func parseRemoteStaticCallInput(input []byte) (common.Address, []byte, error) {
@@ -1200,3 +1316,55 @@ func (c *remoteStaticCall) Run(ctx PrecompileContext, input []byte) ([]byte, err
 
 	return result, nil
 }
+<<<<<<< HEAD
+=======
+
+	L1BlockNumberRaw := info.GetState(types.L1BlockAddr, types.L1BlockNumberSlot)
+	L1BlockNumber := L1BlockNumberRaw.Big()
+
+	// ABI definition to decode `input` data
+	const ethcallAbi = `[{
+		"type" : "function",
+		"name" : "eth_call",
+		"inputs" : [
+			{ "name" : "from", "type" : "address" },
+			{ "name" : "to", "type" : "address" },
+			{ "name" : "data", "type" : "bytes" },
+		]
+	}]`
+
+	parsedABI, err := abi.JSON(strings.NewReader(ethcallAbi))
+	if err != nil {
+		return nil, err
+	}
+
+	// assuming input is encoded with "eth_call" function and parameters (from, to, data, blockNumber)
+	method, exist := parsedABI.Methods["eth_call"]
+	if !exist {
+		return nil, errors.New("method eth_call does not exist")
+	}
+
+	// decode input
+	var (
+		from common.Address
+		to   common.Address
+		data []byte
+	)
+	err = method.Inputs.UnpackIntoMap(map[string]interface{}{
+		"from": &from,
+		"to":   &to,
+		"data": &data,
+	}, input)
+	if err != nil {
+		return nil, err
+	}
+
+	callArgs := ethereum.CallMsg{From: from, To: &to, Data: data}
+	result, err := ethClient.CallContract(context.Background(), callArgs, L1BlockNumber)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+>>>>>>> origin/fixup-pass1

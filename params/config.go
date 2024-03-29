@@ -354,6 +354,7 @@ type ChainConfig struct {
 	PragueTime   *uint64 `json:"pragueTime,omitempty"`   // Prague switch time (nil = no fork, 0 = already on prague)
 	VerkleTime   *uint64 `json:"verkleTime,omitempty"`   // Verkle switch time (nil = no fork, 0 = already on verkle)
 
+<<<<<<< HEAD
 	BedrockBlock *big.Int `json:"bedrockBlock,omitempty"` // Bedrock switch block (nil = no fork, 0 = already on optimism bedrock)
 	RegolithTime *uint64  `json:"regolithTime,omitempty"` // Regolith switch time (nil = no fork, 0 = already on optimism regolith)
 	CanyonTime   *uint64  `json:"canyonTime,omitempty"`   // Canyon switch time (nil = no fork, 0 = already on optimism canyon)
@@ -362,6 +363,11 @@ type ChainConfig struct {
 
 	InteropTime *uint64 `json:"interopTime,omitempty"` // Interop switch time (nil = no fork, 0 = already on optimism interop)
 	// 	L1ArchiveNodeRPC string   `json:"l1ArchiveNodeRPC"`
+=======
+	BedrockBlock     *big.Int `json:"bedrockBlock,omitempty"`     // Bedrock switch block (nil = no fork, 0 = already on optimism bedrock)
+	RegolithTime     *uint64  `json:"regolithTime,omitempty"`     // Regolith switch time (nil = no fork, 0 = already on optimism regolith)
+	L1ArchiveNodeRPC *string  `json:"l1ArchiveNodeRPC,omitempty"` // L1 Archive Node RPC URL (nil = no fork, 0 = already on optimism l1 archive node)
+>>>>>>> origin/fixup-pass1
 	// TerminalTotalDifficulty is the amount of total difficulty reached by
 	// the network that triggers the consensus upgrade.
 	TerminalTotalDifficulty *big.Int `json:"terminalTotalDifficulty,omitempty"`
@@ -408,6 +414,10 @@ type OptimismConfig struct {
 // String implements the stringer interface, returning the optimism fee config details.
 func (o *OptimismConfig) String() string {
 	return "optimism"
+}
+
+func (o *OptimismConfig) Get1ArchiveNodeRPC() string {
+	return o.Get1ArchiveNodeRPC()
 }
 
 // Description returns a human-readable description of ChainConfig.

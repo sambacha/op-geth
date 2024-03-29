@@ -56,7 +56,7 @@ var (
 
 	// L1BlockAddr is the address of the L1Block contract which stores the L1 gas attributes.
 	L1BlockAddr = common.HexToAddress("0x4200000000000000000000000000000000000015")
-
+	L1BlockHashSlot = common.BigToHash(big.NewInt(2))
 	L1BaseFeeSlot = common.BigToHash(big.NewInt(1))
 	OverheadSlot  = common.BigToHash(big.NewInt(5))
 	ScalarSlot    = common.BigToHash(big.NewInt(6))
