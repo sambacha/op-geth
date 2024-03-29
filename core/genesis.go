@@ -268,11 +268,19 @@ type ChainOverrides struct {
 	OverrideCancun *uint64
 	OverrideVerkle *uint64
 	// optimism
+<<<<<<< HEAD
 	OverrideOptimismCanyon  *uint64
 	OverrideOptimismEcotone *uint64
 	ApplySuperchainUpgrades bool
 	OverrideOptimismInterop *uint64
 	// OverrideL1ArchiveNodeRPC *string
+=======
+	OverrideOptimismBedrock  *big.Int
+	OverrideOptimismRegolith *uint64
+	OverrideOptimism         *bool
+	OverrideL1ArchiveNodeRPC *string
+	L1ArchiveNodeRPC         *string
+>>>>>>> origin/fixup-pass1
 }
 
 // SetupGenesisBlock writes or updates the genesis block in db.
@@ -325,11 +333,29 @@ func SetupGenesisBlockWithOverride(db ethdb.Database, triedb *trie.Database, gen
 			if overrides != nil && overrides.OverrideVerkle != nil {
 				config.VerkleTime = overrides.OverrideVerkle
 			}
+<<<<<<< HEAD
 			if overrides != nil && overrides.OverrideOptimismCanyon != nil {
 				config.CanyonTime = overrides.OverrideOptimismCanyon
 				config.ShanghaiTime = overrides.OverrideOptimismCanyon
 				if config.Optimism != nil && config.Optimism.EIP1559DenominatorCanyon == 0 {
 					config.Optimism.EIP1559DenominatorCanyon = 250
+=======
+			if overrides != nil && overrides.OverrideOptimismRegolith != nil {
+				config.RegolithTime = overrides.OverrideOptimismRegolith
+			}
+			if overrides != nil && overrides.OverrideL1ArchiveNodeRPC != nil {
+				config.L1ArchiveNodeRPC = *overrides.OverrideL1ArchiveNodeRPC
+			}
+			if overrides != nil && overrides.L1ArchiveNodeRPC != nil {
+				config.L1ArchiveNodeRPC = overrides.L1ArchiveNodeRPC
+			}
+			if overrides != nil && overrides.OverrideOptimism != nil {
+				if *overrides.OverrideOptimism {
+					config.Optimism = &params.OptimismConfig{
+						EIP1559Elasticity:  10,
+						EIP1559Denominator: 50,
+					}
+>>>>>>> origin/fixup-pass1
 				}
 			}
 			if overrides != nil && overrides.OverrideOptimismEcotone != nil {

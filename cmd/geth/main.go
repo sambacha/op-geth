@@ -71,6 +71,13 @@ var (
 		utils.OverrideOptimismEcotone,
 		utils.OverrideOptimismInterop,
 		utils.EnablePersonal,
+<<<<<<< HEAD
+=======
+		utils.OverrideOptimismBedrock,
+		utils.OverrideOptimismRegolith,
+		utils.OverrideOptimism,
+		utils.OverrideL1ArchiveNodeRPC,
+>>>>>>> origin/fixup-pass1
 		utils.TxPoolLocalsFlag,
 		utils.TxPoolNoLocalsFlag,
 		utils.TxPoolJournalFlag,
@@ -153,9 +160,13 @@ var (
 		utils.RollupHistoricalRPCTimeoutFlag,
 		utils.RollupDisableTxPoolGossipFlag,
 		utils.RollupComputePendingBlock,
+<<<<<<< HEAD
 		utils.RollupHaltOnIncompatibleProtocolVersionFlag,
 		utils.RollupSuperchainUpgradesFlag,
 		//	utils.L1ArchiveNodeRPCFlag,
+=======
+		utils.L1ArchiveNodeRPCFlag,
+>>>>>>> origin/fixup-pass1
 		configFileFlag,
 		utils.LogDebugFlag,
 		utils.LogBacktraceAtFlag,

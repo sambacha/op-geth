@@ -156,9 +156,15 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 		return nil, err
 	}
 
+<<<<<<< HEAD
 	//if config.L1ArchiveNodeRPC != "" {
 	//	chainConfig.L1ArchiveNodeRPC = config.L1ArchiveNodeRPC
 	//}
+=======
+	if config.L1ArchiveNodeRPC != "" {
+		chainConfig.L1ArchiveNodeRPC = config.L1ArchiveNodeRPC
+	}
+>>>>>>> origin/fixup-pass1
 
 	engine, err := ethconfig.CreateConsensusEngine(chainConfig, chainDb)
 	if err != nil {
@@ -231,6 +237,7 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	if config.OverrideOptimismEcotone != nil {
 		overrides.OverrideOptimismEcotone = config.OverrideOptimismEcotone
 	}
+<<<<<<< HEAD
 	if config.OverrideOptimismInterop != nil {
 		overrides.OverrideOptimismInterop = config.OverrideOptimismInterop
 	}
@@ -241,6 +248,14 @@ func New(stack *node.Node, config *ethconfig.Config) (*Ethereum, error) {
 	//	overrides.OverrideL1ArchiveNodeRPC = &config.L1ArchiveNodeRPC
 	//}
 
+=======
+	if config.L1ArchiveNodeRPC != "" {
+		overrides.OverrideL1ArchiveNodeRPC = &config.L1ArchiveNodeRPC
+	}
+	if config.OverrideL1ArchiveNodeRPC != nil {
+		overrides.L1ArchiveNodeRPC = config.OverrideL1ArchiveNodeRPC
+	}
+>>>>>>> origin/fixup-pass1
 	eth.blockchain, err = core.NewBlockChain(chainDb, cacheConfig, config.Genesis, &overrides, eth.engine, vmConfig, eth.shouldPreserve, &config.TxLookupLimit)
 	if err != nil {
 		return nil, err

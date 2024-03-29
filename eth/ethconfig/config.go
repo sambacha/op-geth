@@ -158,6 +158,7 @@ type Config struct {
 	// OverrideCancun (TODO: remove after the fork)
 	OverrideCancun *uint64 `toml:",omitempty"`
 
+<<<<<<< HEAD
 	// OverrideVerkle (TODO: remove after the fork)
 	OverrideVerkle *uint64 `toml:",omitempty"`
 
@@ -177,6 +178,18 @@ type Config struct {
 	RollupDisableTxPoolAdmission            bool
 	RollupHaltOnIncompatibleProtocolVersion string
 	// L1ArchiveNodeRPC           string
+=======
+	OverrideOptimismBedrock  *big.Int
+	OverrideOptimismRegolith *uint64 `toml:",omitempty"`
+	OverrideOptimism         *bool
+	OverrideL1ArchiveNodeRPC *string
+
+	RollupSequencerHTTP        string
+	RollupHistoricalRPC        string
+	RollupHistoricalRPCTimeout time.Duration
+	RollupDisableTxPoolGossip  bool
+	L1ArchiveNodeRPC           string
+>>>>>>> origin/fixup-pass1
 }
 
 // CreateConsensusEngine creates a consensus engine for the given chain config.

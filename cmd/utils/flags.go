@@ -271,10 +271,24 @@ var (
 		Usage:    "Manually specify the Optimism Ecotone fork timestamp, overriding the bundled setting",
 		Category: flags.EthCategory,
 	}
+<<<<<<< HEAD
 	OverrideOptimismInterop = &cli.Uint64Flag{
 		Name:     "override.interop",
 		Usage:    "Manually specify the Optimsim Interop feature-set fork timestamp, overriding the bundled setting",
 		Category: flags.EthCategory,
+=======
+	OverrideL1ArchiveNodeRPC = &cli.StringFlag{
+		Name:     "override.l1archivenoderpc",
+		Usage:    "Manually specify the L1 Archive Node RPC URL, overriding the bundled setting",
+		Category: flags.EthCategory,
+	}
+	// Light server and client settings
+	LightServeFlag = &cli.IntFlag{
+		Name:     "light.serve",
+		Usage:    "Maximum percentage of time allowed for serving LES requests (multi-threaded processing allows values over 100)",
+		Value:    ethconfig.Defaults.LightServ,
+		Category: flags.LightCategory,
+>>>>>>> origin/fixup-pass1
 	}
 	SyncModeFlag = &flags.TextMarshalerFlag{
 		Name:     "syncmode",
@@ -885,6 +899,7 @@ var (
 		Usage:    "By default the pending block equals the latest block to save resources and not leak txs from the tx-pool, this flag enables computing of the pending block from the tx-pool instead.",
 		Category: flags.RollupCategory,
 	}
+<<<<<<< HEAD
 	RollupHaltOnIncompatibleProtocolVersionFlag = &cli.StringFlag{
 		Name:     "rollup.halt",
 		Usage:    "Opt-in option to halt on incompatible protocol version requirements of the given level (major/minor/patch/none), as signaled through the Engine API by the rollup node",
@@ -902,6 +917,13 @@ var (
 	//	Usage:    "RPC endpoint for L1 archive node.",
 	//	Category: flags.RollupCategory,
 	//}
+=======
+	L1ArchiveNodeRPCFlag = &cli.StringFlag{
+		Name:     "rollup.l1archivenoderpc",
+		Usage:    "RPC endpoint for L1 archive node.",
+		Category: flags.RollupCategory,
+	}
+>>>>>>> origin/fixup-pass1
 
 	// Metrics flags
 	MetricsEnabledFlag = &cli.BoolFlag{
@@ -1849,6 +1871,7 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ethconfig.Config) {
 		cfg.RollupHistoricalRPCTimeout = ctx.Duration(RollupHistoricalRPCTimeoutFlag.Name)
 	}
 	cfg.RollupDisableTxPoolGossip = ctx.Bool(RollupDisableTxPoolGossipFlag.Name)
+<<<<<<< HEAD
 	cfg.RollupDisableTxPoolAdmission = cfg.RollupSequencerHTTP != "" && !ctx.Bool(RollupEnableTxPoolAdmissionFlag.Name)
 	cfg.RollupHaltOnIncompatibleProtocolVersion = ctx.String(RollupHaltOnIncompatibleProtocolVersionFlag.Name)
 	cfg.ApplySuperchainUpgrades = ctx.Bool(RollupSuperchainUpgradesFlag.Name)
@@ -1856,6 +1879,11 @@ func SetEthConfig(ctx *cli.Context, stack *node.Node, cfg *ethconfig.Config) {
 	//	if ctx.IsSet(L1ArchiveNodeRPCFlag.Name) {
 	//		cfg.L1ArchiveNodeRPC = ctx.String(L1ArchiveNodeRPCFlag.Name)
 	//	}
+=======
+	if ctx.IsSet(L1ArchiveNodeRPCFlag.Name) {
+		cfg.L1ArchiveNodeRPC = ctx.String(L1ArchiveNodeRPCFlag.Name)
+	}
+>>>>>>> origin/fixup-pass1
 	// Override any default configs for hard coded networks.
 	switch {
 	case ctx.Bool(MainnetFlag.Name):
