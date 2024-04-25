@@ -92,7 +92,7 @@ func TestCallTracerNativeWithLog(t *testing.T) {
 	testCallTracer("callTracer", "call_tracer_withLog", t)
 }
 
-func testCallTracer(tracerName string, dirPath string, t *testing.T) {
+func testCallTracer(tracerName, dirPath string, t *testing.T) {
 	isLegacy := strings.HasSuffix(dirPath, "_legacy")
 	files, err := os.ReadDir(filepath.Join("testdata", dirPath))
 	if err != nil {

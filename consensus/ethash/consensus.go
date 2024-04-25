@@ -470,9 +470,11 @@ func calcDifficultyFrontier(time uint64, parent *types.Header) *big.Int {
 }
 
 // Exported for fuzzing
-var FrontierDifficultyCalculator = calcDifficultyFrontier
-var HomesteadDifficultyCalculator = calcDifficultyHomestead
-var DynamicDifficultyCalculator = makeDifficultyCalculator
+var (
+	FrontierDifficultyCalculator  = calcDifficultyFrontier
+	HomesteadDifficultyCalculator = calcDifficultyHomestead
+	DynamicDifficultyCalculator   = makeDifficultyCalculator
+)
 
 // Prepare implements consensus.Engine, initializing the difficulty field of a
 // header to conform to the ethash protocol. The changes are done inline.

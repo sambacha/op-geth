@@ -594,7 +594,7 @@ func (api *ConsensusAPI) delayPayloadImport(block *types.Block) (engine.PayloadS
 
 // setInvalidAncestor is a callback for the downloader to notify us if a bad block
 // is encountered during the async sync.
-func (api *ConsensusAPI) setInvalidAncestor(invalid *types.Header, origin *types.Header) {
+func (api *ConsensusAPI) setInvalidAncestor(invalid, origin *types.Header) {
 	api.invalidLock.Lock()
 	defer api.invalidLock.Unlock()
 
@@ -604,7 +604,7 @@ func (api *ConsensusAPI) setInvalidAncestor(invalid *types.Header, origin *types
 
 // checkInvalidAncestor checks whether the specified chain end links to a known
 // bad ancestor. If yes, it constructs the payload failure response to return.
-func (api *ConsensusAPI) checkInvalidAncestor(check common.Hash, head common.Hash) *engine.PayloadStatusV1 {
+func (api *ConsensusAPI) checkInvalidAncestor(check, head common.Hash) *engine.PayloadStatusV1 {
 	api.invalidLock.Lock()
 	defer api.invalidLock.Unlock()
 
@@ -735,7 +735,7 @@ func (api *ConsensusAPI) ExchangeCapabilities([]string) []string {
 // GetPayloadBodiesV1 implements engine_getPayloadBodiesByHashV1 which allows for retrieval of a list
 // of block bodies by the engine api.
 func (api *ConsensusAPI) GetPayloadBodiesByHashV1(hashes []common.Hash) []*engine.ExecutionPayloadBodyV1 {
-	var bodies = make([]*engine.ExecutionPayloadBodyV1, len(hashes))
+	bodies := make([]*engine.ExecutionPayloadBodyV1, len(hashes))
 	for i, hash := range hashes {
 		block := api.eth.BlockChain().GetBlockByHash(hash)
 		bodies[i] = getBody(block)

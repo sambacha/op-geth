@@ -41,7 +41,7 @@ type randTestStep struct {
 
 type proofDb struct{}
 
-func (proofDb) Put(key []byte, value []byte) error {
+func (proofDb) Put(key, value []byte) error {
 	return nil
 }
 
@@ -70,6 +70,7 @@ func newDataSource(input []byte) *dataSource {
 		input, bytes.NewReader(input),
 	}
 }
+
 func (ds *dataSource) readByte() byte {
 	if b, err := ds.reader.ReadByte(); err != nil {
 		return 0
@@ -77,9 +78,11 @@ func (ds *dataSource) readByte() byte {
 		return b
 	}
 }
+
 func (ds *dataSource) Read(buf []byte) (int, error) {
 	return ds.reader.Read(buf)
 }
+
 func (ds *dataSource) Ended() bool {
 	return ds.reader.Len() == 0
 }

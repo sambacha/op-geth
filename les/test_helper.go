@@ -218,14 +218,12 @@ func newTestClientHandler(backend *backends.SimulatedBackend, odr *LesOdr, index
 }
 
 func newTestServerHandler(blocks int, indexers []*core.ChainIndexer, db ethdb.Database, clock mclock.Clock) (*serverHandler, *backends.SimulatedBackend, func()) {
-	var (
-		gspec = core.Genesis{
-			Config:   params.AllEthashProtocolChanges,
-			Alloc:    core.GenesisAlloc{bankAddr: {Balance: bankFunds}},
-			GasLimit: 100000000,
-			BaseFee:  big.NewInt(params.InitialBaseFee),
-		}
-	)
+	gspec := core.Genesis{
+		Config:   params.AllEthashProtocolChanges,
+		Alloc:    core.GenesisAlloc{bankAddr: {Balance: bankFunds}},
+		GasLimit: 100000000,
+		BaseFee:  big.NewInt(params.InitialBaseFee),
+	}
 	genesis := gspec.MustCommit(db)
 
 	// create a simulation backend and pre-commit several customized block to the database.

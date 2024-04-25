@@ -64,7 +64,7 @@ func TestIsHexAddress(t *testing.T) {
 }
 
 func TestHashJsonValidation(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		Prefix string
 		Size   int
 		Error  string
@@ -93,7 +93,7 @@ func TestHashJsonValidation(t *testing.T) {
 }
 
 func TestAddressUnmarshalJSON(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		Input     string
 		ShouldErr bool
 		Output    *big.Int
@@ -124,7 +124,7 @@ func TestAddressUnmarshalJSON(t *testing.T) {
 }
 
 func TestAddressHexChecksum(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		Input  string
 		Output string
 	}{
@@ -211,7 +211,7 @@ func TestMixedcaseAccount_Address(t *testing.T) {
 		`["0x111111111111111111111222222222222333332344"]`, // Too long
 		`["1111111111111111111112222222222223333323"]`,     // Missing 0x
 		`["x1111111111111111111112222222222223333323"]`,    // Missing 0
-		`["0xG111111111111111111112222222222223333323"]`,   //Non-hex
+		`["0xG111111111111111111112222222222223333323"]`,   // Non-hex
 	} {
 		if err := json.Unmarshal([]byte(r), &r2); err == nil {
 			t.Errorf("Expected failure, input %v", r)

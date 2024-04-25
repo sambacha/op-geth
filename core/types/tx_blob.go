@@ -110,7 +110,7 @@ func (tx *BlobTx) blobGasFeeCap() *big.Int   { return tx.BlobFeeCap.ToBig() }
 func (tx *BlobTx) blobHashes() []common.Hash { return tx.BlobHashes }
 func (tx *BlobTx) isSystemTx() bool          { return false }
 
-func (tx *BlobTx) effectiveGasPrice(dst *big.Int, baseFee *big.Int) *big.Int {
+func (tx *BlobTx) effectiveGasPrice(dst, baseFee *big.Int) *big.Int {
 	if baseFee == nil {
 		return dst.Set(tx.GasFeeCap.ToBig())
 	}

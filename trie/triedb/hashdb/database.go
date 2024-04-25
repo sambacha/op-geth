@@ -207,7 +207,7 @@ func (db *Database) Nodes() []common.Hash {
 	db.lock.RLock()
 	defer db.lock.RUnlock()
 
-	var hashes = make([]common.Hash, 0, len(db.dirties))
+	hashes := make([]common.Hash, 0, len(db.dirties))
 	for hash := range db.dirties {
 		hashes = append(hashes, hash)
 	}
@@ -218,7 +218,7 @@ func (db *Database) Nodes() []common.Hash {
 // This function is used to add reference between internal trie node
 // and external node(e.g. storage trie root), all internal trie nodes
 // are referenced together by database itself.
-func (db *Database) Reference(child common.Hash, parent common.Hash) {
+func (db *Database) Reference(child, parent common.Hash) {
 	db.lock.Lock()
 	defer db.lock.Unlock()
 
@@ -226,7 +226,7 @@ func (db *Database) Reference(child common.Hash, parent common.Hash) {
 }
 
 // reference is the private locked version of Reference.
-func (db *Database) reference(child common.Hash, parent common.Hash) {
+func (db *Database) reference(child, parent common.Hash) {
 	// If the node does not exist, it's a node pulled from disk, skip
 	node, ok := db.dirties[child]
 	if !ok {
@@ -498,7 +498,7 @@ type cleaner struct {
 // removed from the dirty cache and moved into the clean cache. The reason behind
 // the two-phase commit is to ensure data availability while moving from memory
 // to disk.
-func (c *cleaner) Put(key []byte, rlp []byte) error {
+func (c *cleaner) Put(key, rlp []byte) error {
 	hash := common.BytesToHash(key)
 
 	// If the node does not exist, we're done on this path
@@ -548,7 +548,7 @@ func (db *Database) Initialized(genesisRoot common.Hash) bool {
 
 // Update inserts the dirty nodes in provided nodeset into database and link the
 // account trie with multiple storage tries if necessary.
-func (db *Database) Update(root common.Hash, parent common.Hash, nodes *trienode.MergedNodeSet) error {
+func (db *Database) Update(root, parent common.Hash, nodes *trienode.MergedNodeSet) error {
 	// Ensure the parent state is present and signal a warning if not.
 	if parent != types.EmptyRootHash {
 		if blob, _ := db.Node(parent); len(blob) == 0 {
@@ -608,7 +608,7 @@ func (db *Database) Size() common.StorageSize {
 	// db.dirtiesSize only contains the useful data in the cache, but when reporting
 	// the total memory consumption, the maintenance metadata is also needed to be
 	// counted.
-	var metadataSize = common.StorageSize(len(db.dirties) * cachedNodeSize)
+	metadataSize := common.StorageSize(len(db.dirties) * cachedNodeSize)
 	return db.dirtiesSize + db.childrenSize + metadataSize
 }
 

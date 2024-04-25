@@ -81,7 +81,7 @@ func (tx *DepositTx) blobGasFeeCap() *big.Int   { return nil }
 func (tx *DepositTx) blobHashes() []common.Hash { return nil }
 func (tx *DepositTx) isSystemTx() bool          { return tx.IsSystemTransaction }
 
-func (tx *DepositTx) effectiveGasPrice(dst *big.Int, baseFee *big.Int) *big.Int {
+func (tx *DepositTx) effectiveGasPrice(dst, baseFee *big.Int) *big.Int {
 	return dst.Set(new(big.Int))
 }
 

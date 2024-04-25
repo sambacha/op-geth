@@ -254,7 +254,7 @@ func storageTrieNodeKey(accountHash common.Hash, path []byte) []byte {
 // node. The characteristics of legacy trie node are:
 // - the key length is 32 bytes
 // - the key is the hash of val
-func IsLegacyTrieNode(key []byte, val []byte) bool {
+func IsLegacyTrieNode(key, val []byte) bool {
 	if len(key) != common.HashLength {
 		return false
 	}

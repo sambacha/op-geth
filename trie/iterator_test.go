@@ -126,7 +126,7 @@ type iterationElement struct {
 // Tests that the node iterator indeed walks over the entire database contents.
 func TestNodeIteratorCoverage(t *testing.T) {
 	testNodeIteratorCoverage(t, rawdb.HashScheme)
-	//testNodeIteratorCoverage(t, rawdb.PathScheme)
+	// testNodeIteratorCoverage(t, rawdb.PathScheme)
 }
 
 func testNodeIteratorCoverage(t *testing.T, scheme string) {
@@ -134,7 +134,7 @@ func testNodeIteratorCoverage(t *testing.T, scheme string) {
 	db, nodeDb, trie, _ := makeTestTrie(scheme)
 
 	// Gather all the node hashes found by the iterator
-	var elements = make(map[common.Hash]iterationElement)
+	elements := make(map[common.Hash]iterationElement)
 	for it := trie.NodeIterator(nil); it.Next(true); {
 		if it.Hash() != (common.Hash{}) {
 			elements[it.Hash()] = iterationElement{
@@ -480,9 +480,7 @@ func testIteratorContinueAfterSeekError(t *testing.T, memonly bool, scheme strin
 	if !memonly {
 		triedb.Commit(root, false)
 	}
-	var (
-		barNodeBlob []byte
-	)
+	var barNodeBlob []byte
 	tr, _ := New(TrieID(root), triedb)
 	if memonly {
 		tr.reader.banned = map[string]struct{}{string(barNodePath): {}}
@@ -526,7 +524,7 @@ func checkIteratorNoDups(t *testing.T, it NodeIterator, seen map[string]bool) in
 
 func TestIteratorNodeBlob(t *testing.T) {
 	testIteratorNodeBlob(t, rawdb.HashScheme)
-	//testIteratorNodeBlob(t, rawdb.PathScheme)
+	// testIteratorNodeBlob(t, rawdb.PathScheme)
 }
 
 type loggingDb struct {
@@ -543,7 +541,7 @@ func (l *loggingDb) Get(key []byte) ([]byte, error) {
 	return l.backend.Get(key)
 }
 
-func (l *loggingDb) Put(key []byte, value []byte) error {
+func (l *loggingDb) Put(key, value []byte) error {
 	return l.backend.Put(key, value)
 }
 
@@ -559,7 +557,7 @@ func (l *loggingDb) NewBatchWithSize(size int) ethdb.Batch {
 	return l.backend.NewBatchWithSize(size)
 }
 
-func (l *loggingDb) NewIterator(prefix []byte, start []byte) ethdb.Iterator {
+func (l *loggingDb) NewIterator(prefix, start []byte) ethdb.Iterator {
 	return l.backend.NewIterator(prefix, start)
 }
 
@@ -571,7 +569,7 @@ func (l *loggingDb) Stat(property string) (string, error) {
 	return l.backend.Stat(property)
 }
 
-func (l *loggingDb) Compact(start []byte, limit []byte) error {
+func (l *loggingDb) Compact(start, limit []byte) error {
 	return l.backend.Compact(start, limit)
 }
 
@@ -640,7 +638,7 @@ func testIteratorNodeBlob(t *testing.T, scheme string) {
 	triedb.Update(root, types.EmptyRootHash, trienode.NewWithNodeSet(nodes))
 	triedb.Commit(root, false)
 
-	var found = make(map[common.Hash][]byte)
+	found := make(map[common.Hash][]byte)
 	trie, _ = New(TrieID(root), triedb)
 	it := trie.NodeIterator(nil)
 	for it.Next(true) {

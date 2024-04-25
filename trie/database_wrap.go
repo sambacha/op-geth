@@ -53,7 +53,7 @@ type backend interface {
 	// Update performs a state transition by committing dirty nodes contained
 	// in the given set in order to update state from the specified parent to
 	// the specified root.
-	Update(root common.Hash, parent common.Hash, nodes *trienode.MergedNodeSet) error
+	Update(root, parent common.Hash, nodes *trienode.MergedNodeSet) error
 
 	// Commit writes all relevant trie nodes belonging to the specified state
 	// to disk. Report specifies whether logs will be displayed in info level.
@@ -122,7 +122,7 @@ func (db *Database) Reader(blockRoot common.Hash) Reader {
 // given set in order to update state from the specified parent to the specified
 // root. The held pre-images accumulated up to this point will be flushed in case
 // the size exceeds the threshold.
-func (db *Database) Update(root common.Hash, parent common.Hash, nodes *trienode.MergedNodeSet) error {
+func (db *Database) Update(root, parent common.Hash, nodes *trienode.MergedNodeSet) error {
 	if db.preimages != nil {
 		db.preimages.commit(false)
 	}
@@ -235,7 +235,7 @@ func (db *Database) Cap(limit common.StorageSize) error {
 // trie root), all internal trie nodes are referenced together by database itself.
 //
 // It's only supported by hash-based database and will return an error for others.
-func (db *Database) Reference(root common.Hash, parent common.Hash) error {
+func (db *Database) Reference(root, parent common.Hash) error {
 	hdb, ok := db.backend.(*hashdb.Database)
 	if !ok {
 		return errors.New("not supported")

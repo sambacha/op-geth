@@ -85,7 +85,7 @@ type TxPool struct {
 // rollback is expected.
 type TxRelayBackend interface {
 	Send(txs types.Transactions)
-	NewHead(head common.Hash, mined []common.Hash, rollback []common.Hash)
+	NewHead(head common.Hash, mined, rollback []common.Hash)
 	Discard(hashes []common.Hash)
 }
 
@@ -152,7 +152,7 @@ func (txc txStateChanges) setState(txHash common.Hash, mined bool) {
 }
 
 // getLists creates lists of mined and rolled back tx hashes
-func (txc txStateChanges) getLists() (mined []common.Hash, rollback []common.Hash) {
+func (txc txStateChanges) getLists() (mined, rollback []common.Hash) {
 	for hash, val := range txc {
 		if val {
 			mined = append(mined, hash)
@@ -443,7 +443,7 @@ func (pool *TxPool) Add(ctx context.Context, tx *types.Transaction) error {
 	if err := pool.add(ctx, tx); err != nil {
 		return err
 	}
-	//fmt.Println("Send", tx.Hash())
+	// fmt.Println("Send", tx.Hash())
 	pool.relay.Send(types.Transactions{tx})
 
 	pool.chainDb.Put(tx.Hash().Bytes(), data)

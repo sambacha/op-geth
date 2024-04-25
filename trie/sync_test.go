@@ -111,13 +111,13 @@ type trieElement struct {
 func TestEmptySync(t *testing.T) {
 	dbA := NewDatabase(rawdb.NewMemoryDatabase())
 	dbB := NewDatabase(rawdb.NewMemoryDatabase())
-	//dbC := newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.PathScheme)
-	//dbD := newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.PathScheme)
+	// dbC := newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.PathScheme)
+	// dbD := newTestDatabase(rawdb.NewMemoryDatabase(), rawdb.PathScheme)
 
 	emptyA := NewEmpty(dbA)
 	emptyB, _ := New(TrieID(types.EmptyRootHash), dbB)
-	//emptyC := NewEmpty(dbC)
-	//emptyD, _ := New(TrieID(types.EmptyRootHash), dbD)
+	// emptyC := NewEmpty(dbC)
+	// emptyD, _ := New(TrieID(types.EmptyRootHash), dbD)
 
 	for i, trie := range []*Trie{emptyA, emptyB /*emptyC, emptyD*/} {
 		sync := NewSync(trie.Hash(), memorydb.New(), nil, []*Database{dbA, dbB /*dbC, dbD*/}[i].Scheme())
@@ -208,7 +208,7 @@ func testIterativeSync(t *testing.T, count int, bypath bool, scheme string) {
 // partial results are returned, and the others sent only later.
 func TestIterativeDelayedSync(t *testing.T) {
 	testIterativeDelayedSync(t, rawdb.HashScheme)
-	//testIterativeDelayedSync(t, rawdb.PathScheme)
+	// testIterativeDelayedSync(t, rawdb.PathScheme)
 }
 
 func testIterativeDelayedSync(t *testing.T, scheme string) {
@@ -724,7 +724,7 @@ func testSyncMovingTarget(t *testing.T, scheme string) {
 
 	// Revert added modifications from the src trie, to see if dest trie can still
 	// sync with it(overwrite reverted states)
-	var reverted = make(map[string][]byte)
+	reverted := make(map[string][]byte)
 	for k := range diff {
 		srcTrie.MustDelete([]byte(k))
 		reverted[k] = nil
